@@ -13,6 +13,7 @@ from settings.string_constants import (
 from utilities.TypeChecking.TypeChecking import (
     Locations,
     MotionTypes,
+    RotationDirections,
     StartEndLocationsTuple,
 )
 
@@ -38,7 +39,7 @@ start_end_location_map = {
 
 
 def get_start_end_locations(
-    motion_type: MotionTypes,
+    handpath_rotation_direction: RotationDirections,
     arrow_location: Locations,
 ) -> StartEndLocationsTuple:
-    return start_end_location_map[arrow_location][motion_type]
+    return start_end_location_map[arrow_location][handpath_rotation_direction]

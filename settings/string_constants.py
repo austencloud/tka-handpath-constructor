@@ -25,11 +25,13 @@ COLOR = "color"
 MOTION_TYPE = "motion_type"
 
 LOCATION = "location"
+
 ARROW_LOCATION = "arrow_location"
 HAND_LOCATION = "hand_location"
 START_LOCATION = "start_location"
 END_LOCATION = "end_location"
 
+HANDPATH_ROTATION_DIRECTION = "handpath_rotation_direction"
 
 CLOCKWISE = "cw"
 COUNTER_CLOCKWISE = "ccw"

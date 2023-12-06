@@ -46,6 +46,9 @@ class ArrowAttributesDicts(TypedDict):
 MotionAttributes = Literal[
     "color",
     "motion_type",
+    
+    "handpath_rotation_direction"
+    
     "arrow_location",
     "start_location",
     "end_location",

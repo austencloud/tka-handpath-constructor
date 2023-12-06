@@ -281,7 +281,7 @@ class Arrow(GraphicalObject):
     ) -> RotationAngles:
         arrow = arrow or self
         location_to_angle = self.get_location_to_angle_map(
-            arrow.motion.motion_type
+            arrow.motion.motion_type, arrow.motion.handpath_rotation_direction
         )
         return location_to_angle.get(self.arrow_location, 0)
 

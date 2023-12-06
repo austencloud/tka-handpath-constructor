@@ -13,14 +13,17 @@ from objects.motion import Motion
 from settings.string_constants import (
     ARROW_LOCATION,
     BLUE,
+    CLOCKWISE,
     COLOR,
     EAST,
     END_LOCATION,
+    HANDPATH_ROTATION_DIRECTION,
     MOTION_TYPE,
     NORTH,
     NORTHEAST,
     NORTHWEST,
     RED,
+    SHIFT,
     SOUTH,
     SOUTHEAST,
     SOUTHWEST,
@@ -99,10 +102,10 @@ class PictographInit:
     def init_motion_set(self) -> dict[str, dict[str, dict[str, dict[str, str]]]]:
         red_motion_attributes = {
             COLOR: RED,
-            MOTION_TYPE: "shift",
+            MOTION_TYPE: SHIFT,
             ARROW_LOCATION: NORTHEAST,
-            START_LOCATION: "north",
-            END_LOCATION: "east",
+            START_LOCATION: NORTH,
+            END_LOCATION: EAST,
         }
         red_motion = Motion(self.pictograph, self.pictograph.ghost_arrows[RED], None, red_motion_attributes)
         self.pictograph.ghost_arrows[RED].motion = red_motion
@@ -110,10 +113,10 @@ class PictographInit:
         self.pictograph.ghost_arrows[RED].setup_attributes(red_motion_attributes)
         blue_motion_attributes = {
             COLOR: BLUE,
-            MOTION_TYPE: "shift",
+            MOTION_TYPE: SHIFT,
             ARROW_LOCATION: SOUTHWEST,
-            START_LOCATION: "south",
-            END_LOCATION: "west",
+            START_LOCATION: SOUTH,
+            END_LOCATION: WEST,
         }
         blue_motion = Motion(self.pictograph, self.pictograph.ghost_arrows[BLUE], blue_motion_attributes)
         self.pictograph.ghost_arrows[BLUE].motion = blue_motion
