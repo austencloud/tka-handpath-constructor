@@ -1,14 +1,10 @@
 import json
 import logging
 
-from data.letter_engine_data import (
-    motion_type_combinations,
-    motion_type_letter_groups,
-    parallel_combinations,
-)
+from data.letter_engine_data import parallel_combinations
 from data.positions_map import positions_map
 from objects.motion import Motion
-from settings.string_constants import *
+from settings.string_constants import NORTH, WEST, SOUTH, EAST, COUNTER_CLOCKWISE, CLOCKWISE
 
 logging.basicConfig(
     level=logging.INFO,

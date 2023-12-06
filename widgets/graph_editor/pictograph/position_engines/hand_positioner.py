@@ -8,7 +8,6 @@ from settings.string_constants import (
     STATIC,
     START_LOCATION,
     END_LOCATION,
-    PRO,
     NORTH,
     SOUTH,
     EAST,
@@ -19,7 +18,6 @@ from settings.string_constants import (
     RIGHT,
     RED,
     BLUE,
-    END_LAYER,
 )
 from typing import TYPE_CHECKING, Dict, List
 from objects.hand import Hand
@@ -284,44 +282,6 @@ class HandPositioner:
         )
         other_hand.setPos(new_position_other)
 
-    def reposition_I(self, motion1, motion2) -> None:
-        pro_motion = motion1 if motion1[MOTION_TYPE] == PRO else motion2
-        anti_motion = motion2 if motion1[MOTION_TYPE] == PRO else motion1
-
-        pro_hand = next(
-            (
-                hand
-                for hand in self.pictograph.hands
-                if hand.arrow.color == pro_motion[COLOR]
-            ),
-            None,
-        )
-        anti_hand = next(
-            (
-                hand
-                for hand in self.pictograph.hands
-                if hand.arrow.color == anti_motion[COLOR]
-            ),
-            None,
-        )
-
-        if pro_hand and anti_hand:
-            pro_hand_translation_direction = self.determine_translation_direction(
-                pro_motion
-            )
-            anti_hand_translation_direction = self.get_opposite_direction(
-                pro_hand_translation_direction
-            )
-
-            new_position_pro = self.calculate_new_position(
-                pro_hand.pos(), pro_hand_translation_direction
-            )
-            pro_hand.setPos(new_position_pro)
-
-            new_position_anti = self.calculate_new_position(
-                anti_hand.pos(), anti_hand_translation_direction
-            )
-            anti_hand.setPos(new_position_anti)
 
     ### GAMMA TO BETA ### Y, Z
 
@@ -361,17 +321,8 @@ class HandPositioner:
                 return False
 
     def determine_translation_direction(self, motion) -> Direction:
-        """Determine the translation direction based on the arrow's board_state."""
-        if motion[END_LAYER] == 1 and motion[MOTION_TYPE] in [SHIFT, STATIC]:
-            if motion[END_LOCATION] in [NORTH, SOUTH]:
-                return RIGHT if motion[START_LOCATION] == EAST else LEFT
-            elif motion[END_LOCATION] in [EAST, WEST]:
-                return DOWN if motion[START_LOCATION] == SOUTH else UP
-        elif motion[END_LAYER] == 2 and motion[MOTION_TYPE] in [SHIFT, STATIC]:
-            if motion[END_LOCATION] in [NORTH, SOUTH]:
-                return UP if motion[START_LOCATION] == EAST else DOWN
-            elif motion[END_LOCATION] in [EAST, WEST]:
-                return RIGHT if motion[START_LOCATION] == SOUTH else LEFT
+        if motion[END_LOCATION] in [NORTH, SOUTH]:
+            return RIGHT if motion[START_LOCATION] == EAST else LEFT
 
     def calculate_new_position(
         self,

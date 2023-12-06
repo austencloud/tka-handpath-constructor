@@ -59,70 +59,54 @@ class ArrowBox(ObjectBox):
         red_arrow_attributes: List[MotionAttributesDicts] = [
             {
                 COLOR: RED,
-                MOTION_TYPE: PRO,
                 ARROW_LOCATION: NORTHEAST,
                 START_LOCATION: NORTH,
                 END_LOCATION: EAST,
-                TURNS: 0,
             },
             {
                 COLOR: RED,
-                MOTION_TYPE: PRO,
                 ARROW_LOCATION: SOUTHEAST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: EAST,
-                TURNS: 0,
             },
             {
                 COLOR: RED,
-                MOTION_TYPE: ANTI,
                 ARROW_LOCATION: SOUTHEAST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: EAST,
-                TURNS: 0,
             },
             {
                 COLOR: RED,
-                MOTION_TYPE: ANTI,
                 ARROW_LOCATION: NORTHEAST,
                 START_LOCATION: NORTH,
                 END_LOCATION: EAST,
-                TURNS: 0,
             },
         ]
 
         blue_arrow_attributes: List[MotionAttributesDicts] = [
             {
                 COLOR: BLUE,
-                MOTION_TYPE: PRO,
                 ARROW_LOCATION: SOUTHWEST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: WEST,
-                TURNS: 0,
             },
             {
                 COLOR: BLUE,
-                MOTION_TYPE: PRO,
                 ARROW_LOCATION: NORTHWEST,
                 START_LOCATION: NORTH,
                 END_LOCATION: WEST,
-                TURNS: 0,
             },
             {
                 COLOR: BLUE,
-                MOTION_TYPE: ANTI,
                 ARROW_LOCATION: NORTHWEST,
                 START_LOCATION: NORTH,
                 END_LOCATION: WEST,
-                TURNS: 0,
             },
             {
                 COLOR: BLUE,
-                MOTION_TYPE: ANTI,
                 ARROW_LOCATION: SOUTHWEST,
                 START_LOCATION: SOUTH,
                 END_LOCATION: WEST,
-                TURNS: 0,
             },
         ]
 

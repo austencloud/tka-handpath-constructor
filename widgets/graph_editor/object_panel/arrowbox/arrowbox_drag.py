@@ -3,16 +3,12 @@ from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from settings.string_constants import (
-    ANTI,
     BLUE,
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,
-    IN,
-    LAYER,
     NORTHEAST,
     NORTHWEST,
-    PRO,
     HAND_LOCATION,
     RED,
     SOUTHEAST,
@@ -48,7 +44,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.arrowbox = arrowbox
         self.objectbox = arrowbox
         self.ghost_arrow = None
-        self.start_orientation = IN
         self.setup_dependencies(main_window, pictograph, arrowbox)
 
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
@@ -76,7 +71,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         self.placed_arrow.hand = self.ghost_arrow.hand
         self.ghost_arrow.hand.arrow = self.placed_arrow
         self.pictograph.add_motion(
-            self.placed_arrow, self.ghost_arrow.hand, self.motion_type, IN, 1
+            self.placed_arrow, self.ghost_arrow.hand, self.motion_type
         )
         self.pictograph.addItem(self.placed_arrow)
         self.pictograph.arrows.append(self.placed_arrow)
@@ -111,8 +106,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
             self.ghost_arrow,
             self.ghost_arrow.hand,
             self.motion_type,
-            IN,
-            1,
         )
         self.ghost_arrow.update_ghost_arrow(self.attributes)
         self.pictograph.update_pictograph()
@@ -182,7 +175,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     {
                         COLOR: self.color,
                         HAND_LOCATION: self.end_location,
-                        LAYER: 1,
                     }
                 )
                 hand.arrow = self.ghost_arrow
@@ -239,16 +231,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
     def _get_arrow_drag_rotation_angle(
         self, arrow: Arrow | ObjectBoxDrag
     ) -> RotationAngles:
-        """
-        Calculate the rotation angle for the given arrow based on its motion type, rotation direction, color, and location.
-        Takes either the target arrow when setting the pixmap, or the drag widget itself when updating rotation.
-
-        Parameters:
-        arrow (Arrow): The arrow object for which to calculate the rotation angle.
-
-        Returns:
-        RotationAngles: The calculated rotation angle for the arrow.
-        """
         motion_type, rotation_direction, color, location = (
             arrow.motion.motion_type,
             arrow.rotation_direction,
@@ -260,7 +242,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             Tuple[MotionTypes, Colors],
             Dict[RotationDirections, Dict[Locations, RotationAngles]],
         ] = {
-            (PRO, RED): {
+            RED: {
                 CLOCKWISE: {
                     NORTHEAST: 0,
                     SOUTHEAST: 90,
@@ -272,48 +254,6 @@ class ArrowBoxDrag(ObjectBoxDrag):
                     SOUTHEAST: 180,
                     SOUTHWEST: 270,
                     NORTHWEST: 0,
-                },
-            },
-            (PRO, BLUE): {
-                CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 90,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 270,
-                    NORTHWEST: 0,
-                },
-            },
-            (ANTI, RED): {
-                CLOCKWISE: {
-                    NORTHEAST: 90,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 270,
-                    NORTHWEST: 0,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
-                },
-            },
-            (ANTI, BLUE): {
-                CLOCKWISE: {
-                    NORTHEAST: 90,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 270,
-                    NORTHWEST: 0,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
                 },
             },
         }

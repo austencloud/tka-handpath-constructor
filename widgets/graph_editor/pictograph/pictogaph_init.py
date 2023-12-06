@@ -15,23 +15,17 @@ from settings.string_constants import (
     COLOR,
     EAST,
     END_LOCATION,
-    LAYER,
     MOTION_TYPE,
     NORTH,
     NORTHEAST,
     NORTHWEST,
-    PRO,
-    HAND_TYPE,
     RED,
     SOUTH,
     SOUTHEAST,
     SOUTHWEST,
     HAND,
     START_LOCATION,
-    TURNS,
     WEST,
-    ORIENTATION,
-    IN,
     HAND_LOCATION,
 )
 from utilities.TypeChecking.TypeChecking import Colors
@@ -64,8 +58,8 @@ class PictographInit:
         return grid
 
     def init_hand_set(self) -> Dict[Colors, Hand]:
-        red_hand_dict = {COLOR: RED, HAND_LOCATION: NORTH, LAYER: 1, ORIENTATION: IN}
-        blue_hand_dict = {COLOR: BLUE, HAND_LOCATION: SOUTH, LAYER: 1, ORIENTATION: IN}
+        red_hand_dict = {COLOR: RED, HAND_LOCATION: NORTH}
+        blue_hand_dict = {COLOR: BLUE, HAND_LOCATION: SOUTH}
 
         red_hand = Hand(self.pictograph, red_hand_dict)
         blue_hand = Hand(self.pictograph, blue_hand_dict)
@@ -79,20 +73,16 @@ class PictographInit:
     def init_ghost_arrows(self) -> dict[str, GhostArrow]:
         default_red_ghost_arrow_attributes = {
             COLOR: RED,
-            MOTION_TYPE: PRO,
             ARROW_LOCATION: NORTHEAST,
             START_LOCATION: NORTH,
             END_LOCATION: EAST,
-            TURNS: 0,
         }
 
         default_blue_ghost_arrow_attributes = {
             COLOR: BLUE,
-            MOTION_TYPE: PRO,
             ARROW_LOCATION: SOUTHWEST,
             START_LOCATION: SOUTH,
             END_LOCATION: WEST,
-            TURNS: 0,
         }
 
         red_ghost_arrow = GhostArrow(
@@ -108,18 +98,12 @@ class PictographInit:
     def init_ghost_hands(self) -> dict[str, GhostHand]:
         default_red_ghost_hand_attributes = {
             COLOR: RED,
-            HAND_TYPE: HAND,
             HAND_LOCATION: EAST,
-            LAYER: 1,
-            ORIENTATION: IN,
         }
 
         default_blue_ghost_hand_attributes = {
             COLOR: BLUE,
-            HAND_TYPE: HAND,
             HAND_LOCATION: WEST,
-            LAYER: 1,
-            ORIENTATION: IN,
         }
 
         red_ghost_hand = GhostHand(self.pictograph, default_red_ghost_hand_attributes)
