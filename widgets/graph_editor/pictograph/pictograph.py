@@ -74,16 +74,13 @@ class Pictograph(QGraphicsScene):
 
         self.motion_set = self.initializer.init_motion_set()
 
-
-
         self.grid: Grid = self.initializer.init_grid()
         self.view: PictographView = self.initializer.init_view()
         self.hand_set = self.initializer.init_hand_set()
         self.letter_item: LetterItem = self.initializer.init_letter_item()
         self.locations = self.initializer.init_locations(self.grid)
 
-        # set the icons to 80% of the button size
-
+        
         self.setup_managers(main_widget)
 
     def setup_managers(self, main_widget: "MainWidget") -> None:

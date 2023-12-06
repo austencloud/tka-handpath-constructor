@@ -38,7 +38,7 @@ class MainWidget(QWidget):
     def eventFilter(self, source, event: QEvent) -> bool:
         if event.type() == QEvent.Type.KeyPress:
             self.key_event_handler.keyPressEvent(
-                event, self, self.graph_editor.pictograph
+                event, self.graph_editor.pictograph
             )
             return True
         return super().eventFilter(source, event)

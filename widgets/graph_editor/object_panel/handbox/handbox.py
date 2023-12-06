@@ -30,10 +30,9 @@ class Handbox(ObjectBox):
         self.main_window = main_widget.main_window
         self.view = HandBoxView(self)
         self.pictograph = pictograph
-        self.grid = Grid("resources/images/grid/grid.svg")
+        self.grid = Grid(self)
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
-        self.addItem(self.grid)
         self.hands: List[Hand] = []
         self.hand_type = None
         self.drag = None

@@ -49,10 +49,9 @@ class PictographInit:
         return view
 
     def init_grid(self) -> Grid:
-        grid = Grid("resources/images/grid/grid.svg")
+        grid = Grid(self.pictograph)
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
-        self.pictograph.addItem(grid)
         grid.init_center()
         grid.init_handpoints()
         grid.init_layer2_points()
