@@ -61,7 +61,6 @@ class Hand(GraphicalObject):
                 self.ghost_hand = self.scene.ghost_hands[self.color]
             self.ghost_hand.color = self.color
             self.ghost_hand.hand_location = self.hand_location
-            self.ghost_hand.layer = self.layer
             self.ghost_hand.update_appearance()
             self.scene.addItem(self.ghost_hand)
             self.ghost_hand.arrow = self.arrow
@@ -99,7 +98,6 @@ class Hand(GraphicalObject):
             )
             self.ghost_hand.color = self.color
             self.ghost_hand.hand_location = self.hand_location
-            self.ghost_hand.layer = self.layer
             self.ghost_hand.update_appearance()
 
             self.scene.hands.remove(self)
@@ -181,7 +179,6 @@ class Hand(GraphicalObject):
         new_location = self.get_closest_diamond_point(event.scenePos())
 
         self.hand_location = new_location
-        self.axis = self.update_axis(self.hand_location)
         self.update_appearance()
         self.setPos(closest_handpoint)
 
@@ -224,12 +221,7 @@ class Hand(GraphicalObject):
 
     ### HELPERS ###
 
-    def swap_layer(self) -> None:
-        if self.layer == 1:
-            self.layer = 2
-        else:
-            self.layer = 1
-        self.update_rotation()
+
 
     def set_svg_color(self, new_color: Colors) -> bytes:
         new_hex_color: ColorsHex = COLOR_MAP.get(new_color)

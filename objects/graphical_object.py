@@ -104,3 +104,7 @@ class GraphicalObject(QGraphicsSvgItem):
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
             self.update_location(event.scenePos())
+
+
+    def set_drag_pos(self, new_pos: QPointF) -> None:
+        self.setPos(new_pos)

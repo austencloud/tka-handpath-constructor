@@ -53,11 +53,7 @@ class HandBoxDrag(ObjectBoxDrag):
         self.placed_hand.arrow.motion.start_location = self.hand_location
         self.placed_hand.arrow.motion.end_location = self.hand_location
 
-        self.pictograph.add_motion(
-            self.placed_hand.arrow,
-            self.placed_hand,
-            STATIC,
-        )
+        self.placed_hand.motion = self.ghost_hand.motion
         self.placed_hand.motion.arrow_location = self.hand_location
         self.placed_hand.motion.start_location = self.hand_location
         self.placed_hand.motion.end_location = self.hand_location
@@ -98,14 +94,8 @@ class HandBoxDrag(ObjectBoxDrag):
         if self.ghost_hand not in self.pictograph.items():
             self.pictograph.addItem(self.ghost_hand)
 
-        # remove the old motion from the pcitograph before adding the new one
-        for motion in self.pictograph.motions[:]:
-            if motion.color == self.color:
-                self.pictograph.motions.remove(motion)
-
-        self.pictograph.add_motion(
-            self.ghost_hand.arrow, self.ghost_hand, STATIC
-        )
+        self.ghost_hand.arrow.motion = self.pictograph.motion_set[self.color]
+        self.ghost_hand.motion = self.pictograph.motion_set[self.color]
 
         self.pictograph.update_pictograph()
         self.move_to_cursor(self.handbox.view.mapFromGlobal(self.pos()))
@@ -203,6 +193,8 @@ class HandBoxDrag(ObjectBoxDrag):
         }
 
         self.static_arrow = StaticArrow(self.pictograph, static_arrow_dict)
+        self.static_arrow.motion = self.pictograph.motion_set[self.color]
+        self.static_arrow.motion.motion_type = STATIC
         for arrow in self.pictograph.arrows[:]:
             if arrow.color == self.color:
                 self.pictograph.removeItem(arrow)
@@ -222,7 +214,8 @@ class HandBoxDrag(ObjectBoxDrag):
         self.static_arrow.motion.end_location = self.hand_location
         self.static_arrow.hand = self.ghost_hand
         self.static_arrow.hand.arrow = self.static_arrow
-        self.static_arrow.svg_file = f"resources/svg/{self.static_arrow.motion_type}.svg"
+        
+        self.static_arrow.svg_file = f"resources/images/arrows/{self.static_arrow.motion.motion_type}.svg"
         self.static_arrow.update_svg(self.static_arrow.svg_file)
         self.static_arrow.update_appearance()
         self.pictograph.update_pictograph()

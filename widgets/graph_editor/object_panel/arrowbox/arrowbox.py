@@ -167,6 +167,7 @@ class ArrowBox(ObjectBox):
             # If no closest arrow is found, ignore the event
             self.target_arrow = None
             event.ignore()
+            return  # Add this line to exit the method and prevent further processing
 
     def mouseMoveEvent(self, event) -> None:
         if self.target_arrow and self.drag:

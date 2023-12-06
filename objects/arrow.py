@@ -198,8 +198,6 @@ class Arrow(GraphicalObject):
         self.scene.update_pictograph()
         self.scene.arrows.append(self)
 
-    def set_drag_pos(self, new_pos: QPointF) -> None:
-        self.setPos(new_pos)
 
     def mouseReleaseEvent(self, event) -> None:
         self.scene.removeItem(self.ghost_arrow)
@@ -563,7 +561,6 @@ class StaticArrow(Arrow):
     def __init__(self, pictograph, attributes) -> None:
         super().__init__(pictograph, attributes)
         self._disable_interactivity()
-        self.hide()
 
     def _disable_interactivity(self) -> None:
         self.setFlag(QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable, False)
