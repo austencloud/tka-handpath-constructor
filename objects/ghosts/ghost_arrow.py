@@ -32,7 +32,6 @@ class GhostArrow(Arrow):
         self.pictograph = pictograph
         self.color = attributes[COLOR]
         self.target_arrow: "Arrow" = None
-        self.setup_svg_renderer(self.svg_file)
 
     def update_ghost_arrow(self, attributes) -> None:
         self.set_attributes_from_dict(attributes)

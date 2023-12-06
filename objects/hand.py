@@ -29,8 +29,7 @@ if TYPE_CHECKING:
 
 class Hand(GraphicalObject):
     def __init__(self, scene, attributes: Dict) -> None:
-        svg_file = "resources/images/hand.svg"
-        super().__init__(svg_file, scene)
+        super().__init__(scene)
         self._setup_attributes(scene, attributes)
         self.update_appearance()
 
@@ -47,10 +46,11 @@ class Hand(GraphicalObject):
         self.hand_location: Locations = attributes[HAND_LOCATION]
 
         self.side = "left" if self.color == "blue" else "right"
-        self.svg_file = f"resources/images/{self.side}_hand.svg"
+        self.svg_file = f"resources/images/hands/{self.side}_hand.svg"
 
         self.center = self.boundingRect().center()
         if attributes:
+            self.setup_svg_renderer(self.svg_file)
             self.update_attributes(attributes)
 
     ### MOUSE EVENTS ###

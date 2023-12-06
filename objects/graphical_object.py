@@ -20,21 +20,17 @@ from utilities.TypeChecking.TypeChecking import (
 class GraphicalObject(QGraphicsSvgItem):
     self: Union["Hand", "Arrow"]
 
-    def __init__(self, svg_file: str, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
-        self.svg_file = svg_file
         self.pictograph = pictograph
 
         self.renderer: QSvgRenderer = None
         self.color: Colors = None
 
         self.center = self.boundingRect().center()
-        if svg_file:
-            self.setup_svg_renderer(svg_file)
         self.setup_graphics_flags()
 
     def setup_graphics_flags(self) -> None:
-        # Common flags setup for Arrow and Hand
         self.setFlags(
             QGraphicsSvgItem.GraphicsItemFlag.ItemIsMovable
             | QGraphicsSvgItem.GraphicsItemFlag.ItemIsSelectable
@@ -80,7 +76,6 @@ class GraphicalObject(QGraphicsSvgItem):
 
     def update_appearance(self: Union["Hand", "Arrow"]) -> None:
         self.update_color()
-        self.update_rotation()
 
     def set_attributes_from_dict(
         self, attributes: MotionAttributesDicts | HandAttributesDicts

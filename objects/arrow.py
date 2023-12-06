@@ -37,6 +37,7 @@ from objects.graphical_object import GraphicalObject
 from objects.motion import Motion
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
+    MotionAttributesDicts,
     MotionTypes,
     RotationAngles,
     Locations,
@@ -56,14 +57,36 @@ if TYPE_CHECKING:
 
 class Arrow(GraphicalObject):
     def __init__(self, scene, attributes) -> None:
-        super().__init__(svg_file, scene)
+        super().__init__(scene)
         self.setAcceptHoverEvents(True)
-        self._setup_attributes(scene, attributes)
+        self.hand: Hand = None
+        self.motion: Motion = None
+
+    def setup_svg_file(self) -> None:
+        self.svg_file = f"{ARROW_DIR}{self.motion.motion_type}.svg"
+        if self.svg_file:
+            self.setup_svg_renderer(self.svg_file)
 
     ### SETUP ###
 
-    def get_motion_type(self, attributes: "ArrowAttributesDicts") -> MotionTypes:
-        directions = [NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST]
+    def update_appearance(self) -> None:
+        super().update_appearance()
+        self.update_rotation()
+
+    def update_svg(self, svg_file: str) -> None:
+        self.setup_svg_renderer(svg_file)
+
+    def get_motion_type(self) -> MotionTypes:
+        directions = [
+            NORTH,
+            NORTHEAST,
+            EAST,
+            SOUTHEAST,
+            SOUTH,
+            SOUTHWEST,
+            WEST,
+            NORTHWEST,
+        ]
         num_directions = len(directions)
 
         # Function to find the index of a direction
@@ -86,22 +109,14 @@ class Arrow(GraphicalObject):
             if index_diff == 1 or index_diff == num_directions - 1:
                 return SHIFT  # Adjacent
             elif index_diff == num_directions // 2:
-                return DASH   # Opposite
+                return DASH  # Opposite
 
         return STATIC
 
-
-    def _setup_attributes(self, scene, attributes: "ArrowAttributesDicts") -> None:
-        self.scene: Pictograph | ArrowBox = scene
-
+    def setup_attributes(self, attributes: "MotionAttributesDicts") -> None:
         self.drag_offset = QPointF(0, 0)
-        self.hand: Hand = None
-        self.motion: Motion = None
-        
-        self.motion_type = self.get_motion_type(attributes)
-                
-        svg_file = self.get_svg_file(attributes[MOTION_TYPE])
-        
+
+
         self.arrow_location: Locations = attributes[ARROW_LOCATION]
         self.is_svg_mirrored: bool = False
 
@@ -266,45 +281,23 @@ class Arrow(GraphicalObject):
     ) -> RotationAngles:
         arrow = arrow or self
         location_to_angle = self.get_location_to_angle_map(
-            arrow.motion.motion_type, arrow.rotation_direction
+            arrow.motion.motion_type
         )
         return location_to_angle.get(self.arrow_location, 0)
 
     def get_location_to_angle_map(
-        self, motion_type: str, rotation_direction: str
+        self, motion_type: MotionTypes
     ) -> Dict[str, Dict[str, int]]:
         if motion_type == SHIFT:
             return {
-                CLOCKWISE: {
                     NORTHEAST: 0,
                     SOUTHEAST: 90,
                     SOUTHWEST: 180,
                     NORTHWEST: 270,
                 },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 270,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 90,
-                    NORTHWEST: 0,
-                },
-            }.get(rotation_direction, {})
-        elif motion_type == STATIC:
-            return {
-                CLOCKWISE: {NORTHEAST: 0, SOUTHEAST: 0, SOUTHWEST: 0, NORTHWEST: 0},
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 0,
-                    SOUTHWEST: 0,
-                    NORTHWEST: 0,
-                },
-            }.get(rotation_direction, {})
 
     def get_attributes(self) -> ArrowAttributesDicts:
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}
-
-    def get_svg_file(self, motion_type: MotionTypes) -> str:
-        svg_file = f"{ARROW_DIR}"
-        return svg_file
 
     ### MANIPULATION ###
 
@@ -427,8 +420,6 @@ class Arrow(GraphicalObject):
         elif not self.is_svg_mirrored:
             self.mirror()
 
-
-
         old_start_location = self.motion.start_location
         old_end_location = self.motion.end_location
         new_start_location = old_end_location
@@ -438,7 +429,7 @@ class Arrow(GraphicalObject):
         self.update_svg(svg_file)
 
         self.motion.start_location: Locations = new_start_location
-        self.motion.end_location:Locations = new_end_location
+        self.motion.end_location: Locations = new_end_location
 
         self.hand.color = self.color
         self.hand.hand_location = new_end_location
@@ -472,7 +463,6 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.setTransform(transform)
             self.ghost_arrow.is_svg_mirrored = False
         self.is_svg_mirrored = False
-
 
     def delete(self, keep_hand: bool = False) -> None:
         self.scene.removeItem(self)

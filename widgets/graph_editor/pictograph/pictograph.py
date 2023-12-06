@@ -73,6 +73,8 @@ class Pictograph(QGraphicsScene):
         self.ghost_arrows = self.initializer.init_ghost_arrows()
         self.ghost_hands = self.initializer.init_ghost_hands()
 
+        self.motion_set = self.initializer.init_motion_set()
+
         self.grid: Grid = self.initializer.init_grid()
         self.view: PictographView = self.initializer.init_view()
         self.hand_set = self.initializer.init_hand_set()
