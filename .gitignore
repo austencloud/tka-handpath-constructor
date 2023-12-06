@@ -1,0 +1,22 @@
+# Ignore pycache files
+__pycache__/
+
+# Ignore build and dist folders
+build/
+dist/
+
+# Ignore files with secrets/credentials
+*.env
+.aws/credentials
+
+# Ignore OS-specific metadata
+.DS_Store
+Thumbs.db
+
+# Ignore editor swap files
+*.swp
+*.swo
+
+# Ignore virtualenv directories
+venv/
+ENV/
