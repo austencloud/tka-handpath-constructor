@@ -1,19 +1,14 @@
 from PyQt6.QtCore import QPointF
 from settings.numerical_constants import DISTANCE
 from settings.string_constants import (
-    ARROW_LOCATION,
-    COLOR,
-    END_LOCATION,
-    MOTION_TYPE,
     NORTHEAST,
     SOUTHEAST,
     SOUTHWEST,
     NORTHWEST,
-    START_LOCATION,
 )
 from objects.arrow import StaticArrow, Arrow
 
-from typing import TYPE_CHECKING, List, Dict, Any
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph

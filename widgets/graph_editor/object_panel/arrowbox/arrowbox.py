@@ -10,7 +10,6 @@ from settings.string_constants import (
     COLOR,
     EAST,
     END_LOCATION,
-    MOTION_TYPE,
     NORTH,
     NORTHEAST,
     RED,

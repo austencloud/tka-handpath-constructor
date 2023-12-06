@@ -6,7 +6,6 @@ import re
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from utilities.TypeChecking.TypeChecking import (
-    RotationAngles,
     HandAttributesDicts,
     Locations,
     Locations,

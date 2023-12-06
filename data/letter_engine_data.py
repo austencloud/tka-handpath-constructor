@@ -1,4 +1,3 @@
-from settings.string_constants import SHIFT, STATIC
 
 
 

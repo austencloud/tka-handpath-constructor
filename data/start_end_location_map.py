@@ -12,7 +12,6 @@ from settings.string_constants import (
 )
 from utilities.TypeChecking.TypeChecking import (
     Locations,
-    MotionTypes,
     RotationDirections,
     StartEndLocationsTuple,
 )

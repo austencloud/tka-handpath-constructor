@@ -8,7 +8,6 @@ from settings.string_constants import (
     DASH,
     MOTION_TYPE,
     COLOR,
-    COUNTER_CLOCKWISE,
     CLOCKWISE,
     SHIFT,
     STATIC,
@@ -49,10 +48,8 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph.pictograph import Pictograph
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.hand import Hand
-    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
 
 
 class Arrow(GraphicalObject):

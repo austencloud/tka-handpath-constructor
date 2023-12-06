@@ -1,5 +1,4 @@
 from PyQt6.QtCore import QPointF, Qt
-from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene
 
 from objects.arrow import Arrow

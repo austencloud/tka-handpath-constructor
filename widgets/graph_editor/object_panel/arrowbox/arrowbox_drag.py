@@ -3,7 +3,6 @@ from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtCore import Qt
 from settings.string_constants import (
-    BLUE,
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,

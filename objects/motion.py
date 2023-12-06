@@ -1,4 +1,3 @@
-from data.start_end_location_map import get_start_end_locations
 from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
     Colors,
