@@ -56,8 +56,6 @@ class ObjectBoxDrag(QWidget):
 
         scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
         pixmap = QPixmap(scaled_size)
-        self.setFixedSize(scaled_size)
-        self.preview.setFixedSize(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)
         renderer.render(painter)
@@ -82,7 +80,7 @@ class ObjectBoxDrag(QWidget):
         self.target_object = target_object
         self.color = target_object.color
         self.svg_file = target_object.svg_file
-        pixmap = self.create_pixmap()
+        pixmap = self.create_pixmap(target_object)
         self.preview.setPixmap(pixmap)
         self.object_center = (
             self.target_object.boundingRect().center() * self.pictograph.view.view_scale

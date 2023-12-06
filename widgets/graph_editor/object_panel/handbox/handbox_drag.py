@@ -83,7 +83,7 @@ class HandBoxDrag(ObjectBoxDrag):
             self._create_static_arrow()
         self._update_static_arrow()
 
-        pixmap = self.create_pixmap()
+        pixmap = self.create_pixmap(self.target_hand)
         self.setFixedSize(pixmap.size())
         self.preview.setFixedSize(pixmap.size())
         self.preview.setPixmap(pixmap)
@@ -166,21 +166,6 @@ class HandBoxDrag(ObjectBoxDrag):
         local_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
         return self.pictograph.view.rect().contains(local_pos_in_pictograph)
 
-    def create_pixmap(self) -> QPixmap:
-        # Generate a new pixmap based on target hand and apply the rotation
-        new_svg_data = self.target_hand.set_svg_color(self.color)
-        renderer = QSvgRenderer()
-        renderer.load(new_svg_data)
-
-        scaled_size = renderer.defaultSize() * self.pictograph.view.view_scale
-        pixmap = QPixmap(scaled_size)
-        pixmap.fill(Qt.GlobalColor.transparent)
-        painter = QPainter(pixmap)
-
-        renderer.render(painter)
-        painter.end()
-
-        return pixmap
 
     def _create_static_arrow(self) -> None:
         static_arrow_dict = {

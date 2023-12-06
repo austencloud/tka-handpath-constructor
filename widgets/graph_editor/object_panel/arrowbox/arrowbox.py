@@ -109,6 +109,8 @@ class ArrowBox(ObjectBox):
             },
         ]
 
+        
+
         for dict in red_arrow_attributes:
             arrow = Arrow(self, dict)
             arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
