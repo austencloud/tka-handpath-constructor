@@ -8,7 +8,6 @@ from utilities.TypeChecking.TypeChecking import LetterDictionary
 from utilities.export_handler import ExportHandler
 from utilities.json_handler import JsonHandler
 from utilities.layout_manager import LayoutManager
-from utilities.pictograph_generator import PictographGenerator
 from widgets.graph_editor.key_event_handler import KeyEventHandler
 from widgets.graph_editor.graph_editor import GraphEditor
 
@@ -30,7 +29,6 @@ class MainWidget(QWidget):
 
         self.graph_editor = GraphEditor(self)
 
-        self.generator = PictographGenerator(self)
         self.export_handler = ExportHandler(self)
         self.layout_manager = LayoutManager(self)
         self.layout_manager.configure_layouts()

@@ -6,17 +6,12 @@ from objects.hand import Hand
 from widgets.graph_editor.object_panel.handbox.handbox_drag import HandBoxDrag
 from widgets.graph_editor.object_panel.handbox.handbox_view import HandBoxView
 from settings.string_constants import (
-    NORTH,
     EAST,
     HAND_LOCATION,
-    SOUTH,
     WEST,
     COLOR,
     RED,
     BLUE,
-    LAYER,
-    ORIENTATION,
-    IN,
 )
 
 from objects.grid import Grid

@@ -2,15 +2,14 @@ from typing import List
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from PyQt6.QtGui import QTransform
+from data.start_end_location_map import get_start_end_locations
 from objects.hand import Hand
 from settings.string_constants import (
     MOTION_TYPE,
-    TURNS,
     COLOR,
     COUNTER_CLOCKWISE,
     CLOCKWISE,
-    PRO,
-    ANTI,
+    SHIFT,
     STATIC,
     NORTHEAST,
     SOUTHEAST,
@@ -26,7 +25,6 @@ from settings.string_constants import (
     RIGHT,
     ARROW_LOCATION,
     HAND_LOCATION,
-    LAYER,
     RED,
     BLUE,
     NORTH,
@@ -36,7 +34,6 @@ from settings.string_constants import (
 )
 from objects.graphical_object import GraphicalObject
 from objects.motion import Motion
-from data.start_end_location_map import get_start_end_locations
 from utilities.TypeChecking.TypeChecking import (
     ArrowAttributesDicts,
     MotionTypes,
@@ -82,23 +79,8 @@ class Arrow(GraphicalObject):
             self.update_appearance()
             self.attributes = attributes
 
-        self.set_is_svg_mirrored_from_attributes()
         self.update_mirror()
         self.center = self.boundingRect().center()
-
-    def set_is_svg_mirrored_from_attributes(self) -> None:
-        if self.motion_type == PRO:
-            rotation_direction = self.rotation_direction
-            if rotation_direction == CLOCKWISE:
-                self.is_svg_mirrored = False
-            elif rotation_direction == COUNTER_CLOCKWISE:
-                self.is_svg_mirrored = True
-        elif self.motion_type == ANTI:
-            rotation_direction = self.rotation_direction
-            if rotation_direction == CLOCKWISE:
-                self.is_svg_mirrored = True
-            elif rotation_direction == COUNTER_CLOCKWISE:
-                self.is_svg_mirrored = False
 
     ### MOUSE EVENTS ###
 
@@ -224,7 +206,6 @@ class Arrow(GraphicalObject):
                     {
                         COLOR: self.color,
                         HAND_LOCATION: self.motion.end_location,
-                        LAYER: 1,
                     }
                 )
                 hand.arrow = self.ghost_arrow
@@ -251,14 +232,14 @@ class Arrow(GraphicalObject):
     ) -> RotationAngles:
         arrow = arrow or self
         location_to_angle = self.get_location_to_angle_map(
-            arrow.motion_type, arrow.rotation_direction
+            arrow.motion.motion_type, arrow.rotation_direction
         )
         return location_to_angle.get(self.arrow_location, 0)
 
     def get_location_to_angle_map(
         self, motion_type: str, rotation_direction: str
     ) -> Dict[str, Dict[str, int]]:
-        if motion_type == PRO:
+        if motion_type == SHIFT:
             return {
                 CLOCKWISE: {
                     NORTHEAST: 0,
@@ -271,21 +252,6 @@ class Arrow(GraphicalObject):
                     SOUTHEAST: 180,
                     SOUTHWEST: 90,
                     NORTHWEST: 0,
-                },
-            }.get(rotation_direction, {})
-        elif motion_type == ANTI:
-            return {
-                CLOCKWISE: {
-                    NORTHEAST: 270,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 90,
-                    NORTHWEST: 0,
-                },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
                 },
             }.get(rotation_direction, {})
         elif motion_type == STATIC:
@@ -368,9 +334,7 @@ class Arrow(GraphicalObject):
         (
             new_start_location,
             new_end_location,
-        ) = get_start_end_locations(
-            self.motion_type, self.rotation_direction, new_arrow_location
-        )
+        ) = get_start_end_locations(self.motion_type, new_arrow_location)
 
         self.motion.arrow_location = new_arrow_location
         self.motion.start_location = new_start_location
@@ -429,12 +393,7 @@ class Arrow(GraphicalObject):
         elif not self.is_svg_mirrored:
             self.mirror()
 
-        if self.rotation_direction == COUNTER_CLOCKWISE:
-            new_rotation_direction = CLOCKWISE
-        elif self.rotation_direction == CLOCKWISE:
-            new_rotation_direction = COUNTER_CLOCKWISE
-        elif self.rotation_direction == "None":
-            new_rotation_direction = "None"
+
 
         old_start_location = self.motion.start_location
         old_end_location = self.motion.end_location
@@ -444,13 +403,8 @@ class Arrow(GraphicalObject):
         svg_file = self.get_svg_file(self.motion_type)
         self.update_svg(svg_file)
 
-        self.rotation_direction = new_rotation_direction
-        self.motion.start_location = new_start_location
-        self.motion.end_location = new_end_location
-
-        self.motion.rotation_direction = new_rotation_direction
-        self.motion.start_location = new_start_location
-        self.motion.end_location = new_end_location
+        self.motion.start_location: Locations = new_start_location
+        self.motion.end_location:Locations = new_end_location
 
         self.hand.color = self.color
         self.hand.hand_location = new_end_location
@@ -485,46 +439,6 @@ class Arrow(GraphicalObject):
             self.ghost_arrow.is_svg_mirrored = False
         self.is_svg_mirrored = False
 
-    def swap_motion_type(self) -> None:
-        if self.motion_type == ANTI:
-            new_motion_type = PRO
-        elif self.motion_type == PRO:
-            new_motion_type = ANTI
-        elif self.motion_type == STATIC:
-            new_motion_type = STATIC
-
-        if self.rotation_direction == COUNTER_CLOCKWISE:
-            new_rotation_direction = CLOCKWISE
-        elif self.rotation_direction == CLOCKWISE:
-            new_rotation_direction = COUNTER_CLOCKWISE
-        elif self.rotation_direction == "None":
-            new_rotation_direction = "None"
-
-        new_arrow_dict = {
-            COLOR: self.color,
-            MOTION_TYPE: new_motion_type,
-            ARROW_LOCATION: self.arrow_location,
-            START_LOCATION: self.motion.start_location,
-            END_LOCATION: self.motion.end_location,
-        }
-
-        self.motion_type = new_motion_type
-        self.motion.motion_type = new_motion_type
-        self.rotation_direction = new_rotation_direction
-        self.motion.rotation_direction = new_rotation_direction
-
-
-        svg_file = self.get_svg_file(self.motion_type)
-        self.update_svg(svg_file)
-        self.update_attributes(new_arrow_dict)
-        if hasattr(self, "ghost_arrow"):
-            self.ghost_arrow.motion_type = new_motion_type
-            self.ghost_arrow.update_svg(svg_file)
-            self.ghost_arrow.update_attributes(new_arrow_dict)
-
-        self.hand.update_appearance()
-
-        self.scene.update_pictograph()
 
     def delete(self, keep_hand: bool = False) -> None:
         self.scene.removeItem(self)

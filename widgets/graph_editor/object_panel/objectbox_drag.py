@@ -1,8 +1,7 @@
 from PyQt6.QtWidgets import QWidget
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Union
 
 from objects.graphical_object import GraphicalObject
-from utilities.TypeChecking.TypeChecking import RotationAngles
 
 if TYPE_CHECKING:
     from main import MainWindow

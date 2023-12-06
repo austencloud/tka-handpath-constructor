@@ -16,11 +16,6 @@ from settings.string_constants import (
     MOTION_TYPE,
     RED,
     START_LOCATION,
-    TURNS,
-    START_ORIENTATION,
-    END_ORIENTATION,
-    START_LAYER,
-    END_LAYER,
     ARROW_LOCATION,
 )
 from utilities.letter_engine import LetterEngine
@@ -48,7 +43,6 @@ from widgets.graph_editor.pictograph.position_engines.hand_positioner import (
 )
 
 if TYPE_CHECKING:
-    from utilities.pictograph_generator import PictographGenerator
     from widgets.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
     from objects.letter_item import LetterItem
@@ -72,7 +66,6 @@ class Pictograph(QGraphicsScene):
 
     def setup_components(self, main_widget: "MainWidget") -> None:
         self.letters = main_widget.letters
-        self.generator: PictographGenerator = None
         self.event_handler = PictographEventHandler(self)
 
         self.dragged_arrow: Arrow = None

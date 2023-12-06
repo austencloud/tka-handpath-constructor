@@ -19,7 +19,6 @@ from typing import TYPE_CHECKING, List, Dict, Any
 if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
-from utilities.TypeChecking.TypeChecking import MotionAttributes
 
 
 class ArrowPositioner:

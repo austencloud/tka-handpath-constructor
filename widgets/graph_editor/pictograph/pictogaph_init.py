@@ -12,7 +12,6 @@ from objects.hand import Hand
 from settings.string_constants import (
     ARROW_LOCATION,
     BLUE,
-    CLOCKWISE,
     COLOR,
     EAST,
     END_LOCATION,

@@ -7380,15 +7380,7 @@
     "detail": "utilities.letter_engine",
     "documentation": {}
   },
-  {
-    "label": "PictographGenerator",
-    "kind": 6,
-    "importPath": "utilities.pictograph_generator",
-    "description": "utilities.pictograph_generator",
-    "peekOfCode": "class PictographGenerator:\n    def __init__(self, main_widget: \"MainWidget\") -> None:\n        self.pictograph = main_widget.graph_editor.pictograph\n        self.main_window = main_widget.main_window\n        self.export_handler = main_widget.export_handler\n        self.grid = self.pictograph.grid\n        self.output_dir = \"images/pictographs\"\n        self.letters = main_widget.letters\n    def generate_all_pictographs(self) -> None:\n        os.makedirs(self.output_dir, exist_ok=True)",
-    "detail": "utilities.pictograph_generator",
-    "documentation": {}
-  },
+
   {
     "label": "SvgResizer",
     "kind": 6,

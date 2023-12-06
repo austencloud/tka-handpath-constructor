@@ -2,10 +2,6 @@ from PyQt6.QtCore import QPointF
 import math
 from settings.numerical_constants import BETA_OFFSET
 from settings.string_constants import (
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    IN,
-    OUT,
     COLOR,
     MOTION_TYPE,
     SHIFT,
@@ -13,7 +9,6 @@ from settings.string_constants import (
     START_LOCATION,
     END_LOCATION,
     PRO,
-    ANTI,
     NORTH,
     SOUTH,
     EAST,

@@ -1,3 +1,4 @@
+from data.start_end_location_map import get_start_end_locations
 from utilities.TypeChecking.TypeChecking import (
     MotionAttributesDicts,
     Colors,
@@ -13,7 +14,6 @@ if TYPE_CHECKING:
     from objects.arrow import Arrow
     from objects.hand import Hand
 from settings.string_constants import DASH
-from data.start_end_location_map import get_start_end_locations
 
 
 class Motion:
@@ -52,7 +52,7 @@ class Motion:
 
     def update_attr_from_arrow(self) -> None:
         self.color = self.arrow.color
-        self.motion_type = self.arrow.motion_type
+        self.motion_type = self.arrow.motion.motion_type
         self.rotation_direction = self.arrow.rotation_direction
         self.arrow_location = self.arrow.arrow_location
         self.start_location = self.arrow.motion.start_location

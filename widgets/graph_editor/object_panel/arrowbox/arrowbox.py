@@ -5,21 +5,16 @@ from PyQt6.QtWidgets import QGraphicsItem, QGridLayout
 
 from objects.arrow import Arrow
 from settings.string_constants import (
-    ANTI,
     ARROW_LOCATION,
     BLUE,
-    CLOCKWISE,
     COLOR,
-    COUNTER_CLOCKWISE,
     EAST,
     END_LOCATION,
     MOTION_TYPE,
     NORTH,
     NORTHEAST,
-    PRO,
     RED,
     START_LOCATION,
-    TURNS,
     SOUTHEAST,
     SOUTH,
     SOUTHWEST,

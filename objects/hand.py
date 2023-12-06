@@ -104,7 +104,7 @@ class Hand(GraphicalObject):
             self.ghost_hand.update_appearance()
 
             self.scene.hands.remove(self)
-            if self.arrow.motion_type == STATIC:
+            if self.arrow.motion.motion_type == STATIC:
                 self.arrow.motion.start_location = new_location
                 self.arrow.motion.end_location = new_location
 
@@ -115,7 +115,7 @@ class Hand(GraphicalObject):
             self.previous_location = new_location
 
     def update_arrow_location(self, new_location: Locations) -> None:
-        if self.arrow.motion_type == SHIFT:
+        if self.arrow.motion.motion_type == SHIFT:
             shift_location_map: Dict[
                 Tuple(Locations, RotationDirections, MotionTypes),
                 Dict[Locations, Locations],
@@ -141,7 +141,7 @@ class Hand(GraphicalObject):
 
             current_location = self.arrow.arrow_location
             rotation_direction = self.arrow.rotation_direction
-            motion_type = self.arrow.motion_type
+            motion_type = self.arrow.motion.motion_type
             new_location = shift_location_map.get(
                 (current_location, rotation_direction, motion_type), {}
             ).get(new_location)
@@ -159,7 +159,7 @@ class Hand(GraphicalObject):
                 self.arrow.motion.end_location = end_location
                 self.pictograph.update_pictograph()
 
-        elif self.arrow.motion_type == STATIC:
+        elif self.arrow.motion.motion_type == STATIC:
             self.arrow.motion.arrow_location = new_location
             self.arrow.motion.start_location = new_location
             self.arrow.motion.end_location = new_location

@@ -7,13 +7,6 @@ from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from settings.string_constants import (
     IN,
-    OUT,
-    CLOCKWISE,
-    COUNTER_CLOCKWISE,
-    NORTH,
-    SOUTH,
-    WEST,
-    EAST,
     COLOR,
     MOTION_TYPE,
     STATIC,

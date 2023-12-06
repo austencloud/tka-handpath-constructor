@@ -250,7 +250,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
         RotationAngles: The calculated rotation angle for the arrow.
         """
         motion_type, rotation_direction, color, location = (
-            arrow.motion_type,
+            arrow.motion.motion_type,
             arrow.rotation_direction,
             arrow.color,
             arrow.arrow_location,

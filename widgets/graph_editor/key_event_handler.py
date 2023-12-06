@@ -6,7 +6,6 @@ from settings.string_constants import UP, LEFT, DOWN, RIGHT
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
