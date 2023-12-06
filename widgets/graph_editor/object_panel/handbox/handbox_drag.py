@@ -6,14 +6,12 @@ from objects.arrow import StaticArrow
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from settings.string_constants import (
-    IN,
     COLOR,
     MOTION_TYPE,
     STATIC,
     ARROW_LOCATION,
     START_LOCATION,
     END_LOCATION,
-    TURNS,
 )
 from widgets.graph_editor.object_panel.objectbox_drag import ObjectBoxDrag
 
@@ -89,17 +87,10 @@ class HandBoxDrag(ObjectBoxDrag):
             self._create_static_arrow()
         self._update_static_arrow()
 
-        self.current_rotation_angle = self._get_hand_drag_rotation_angle(self)
-        rotated_pixmap = self.create_pixmap_with_rotation(self.current_rotation_angle)
-
-        if self.current_rotation_angle in [90, 270]:
-            new_size = QSize(rotated_pixmap.width(), rotated_pixmap.height())
-        else:
-            new_size = rotated_pixmap.size()
-
-        self.setFixedSize(new_size)
-        self.preview.setFixedSize(new_size)
-        self.preview.setPixmap(rotated_pixmap)
+        pixmap = self.create_pixmap()
+        self.setFixedSize(pixmap.size())
+        self.preview.setFixedSize(pixmap.size())
+        self.preview.setPixmap(pixmap)
         self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         if self.ghost_hand not in self.pictograph.hands:
@@ -113,7 +104,7 @@ class HandBoxDrag(ObjectBoxDrag):
                 self.pictograph.motions.remove(motion)
 
         self.pictograph.add_motion(
-            self.ghost_hand.arrow, self.ghost_hand, STATIC, IN, 1
+            self.ghost_hand.arrow, self.ghost_hand, STATIC
         )
 
         self.pictograph.update_pictograph()
@@ -186,7 +177,7 @@ class HandBoxDrag(ObjectBoxDrag):
         local_pos_in_pictograph = self.pictograph.view.mapFromGlobal(pos_in_main_window)
         return self.pictograph.view.rect().contains(local_pos_in_pictograph)
 
-    def create_pixmap_with_rotation(self, angle) -> QPixmap:
+    def create_pixmap(self) -> QPixmap:
         # Generate a new pixmap based on target hand and apply the rotation
         new_svg_data = self.target_hand.set_svg_color(self.color)
         renderer = QSvgRenderer()
@@ -199,10 +190,8 @@ class HandBoxDrag(ObjectBoxDrag):
 
         renderer.render(painter)
         painter.end()
-        rotate_transform = QTransform().rotate(angle)
-        rotated_pixmap = pixmap.transformed(rotate_transform)
-
-        return rotated_pixmap
+        
+        return pixmap
 
     def _create_static_arrow(self) -> None:
         static_arrow_dict = {
@@ -211,7 +200,7 @@ class HandBoxDrag(ObjectBoxDrag):
             ARROW_LOCATION: self.hand_location,
             START_LOCATION: self.hand_location,
             END_LOCATION: self.hand_location,
-            TURNS: 0,
+
         }
 
         self.static_arrow = StaticArrow(self.pictograph, static_arrow_dict)

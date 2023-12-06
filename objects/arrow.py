@@ -5,6 +5,7 @@ from PyQt6.QtGui import QTransform
 from data.start_end_location_map import get_start_end_locations
 from objects.hand import Hand
 from settings.string_constants import (
+    DASH,
     MOTION_TYPE,
     COLOR,
     COUNTER_CLOCKWISE,
@@ -55,12 +56,40 @@ if TYPE_CHECKING:
 
 class Arrow(GraphicalObject):
     def __init__(self, scene, attributes) -> None:
-        svg_file = self.get_svg_file(attributes[MOTION_TYPE])
         super().__init__(svg_file, scene)
         self.setAcceptHoverEvents(True)
         self._setup_attributes(scene, attributes)
 
     ### SETUP ###
+
+    def get_motion_type(self, attributes: "ArrowAttributesDicts") -> MotionTypes:
+        directions = [NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST]
+        num_directions = len(directions)
+
+        # Function to find the index of a direction
+        def find_index(direction):
+            return directions.index(direction)
+
+        start_location = self.motion.start_location if self.motion else None
+        end_location = self.motion.end_location if self.motion else None
+
+        if start_location and end_location:
+            if start_location == end_location:
+                return STATIC
+
+            start_index = find_index(start_location)
+            end_index = find_index(end_location)
+
+            # Calculate the index difference in the circular list
+            index_diff = (end_index - start_index) % num_directions
+
+            if index_diff == 1 or index_diff == num_directions - 1:
+                return SHIFT  # Adjacent
+            elif index_diff == num_directions // 2:
+                return DASH   # Opposite
+
+        return STATIC
+
 
     def _setup_attributes(self, scene, attributes: "ArrowAttributesDicts") -> None:
         self.scene: Pictograph | ArrowBox = scene
@@ -68,6 +97,11 @@ class Arrow(GraphicalObject):
         self.drag_offset = QPointF(0, 0)
         self.hand: Hand = None
         self.motion: Motion = None
+        
+        self.motion_type = self.get_motion_type(attributes)
+                
+        svg_file = self.get_svg_file(attributes[MOTION_TYPE])
+        
         self.arrow_location: Locations = attributes[ARROW_LOCATION]
         self.is_svg_mirrored: bool = False
 
