@@ -82,7 +82,7 @@ class ObjectBoxDrag(QWidget):
         self.target_object = target_object
         self.color = target_object.color
         self.svg_file = target_object.svg_file
-        pixmap = self.create_pixmap(target_object)
+        pixmap = self.create_pixmap()
         self.preview.setPixmap(pixmap)
         self.object_center = (
             self.target_object.boundingRect().center() * self.pictograph.view.view_scale

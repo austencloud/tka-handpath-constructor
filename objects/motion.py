@@ -32,12 +32,12 @@ class Motion:
     def setup_attributes(self, attributes) -> None:
         self.color: Colors = attributes[COLOR]
         self.motion_type: MotionTypes = attributes[MOTION_TYPE]
-        
-        self.handpath_rotation_direction = self.get_handpath_rotation_direction()
-        
         self.arrow_location: Locations = attributes[ARROW_LOCATION]
         self.start_location: Locations = attributes[START_LOCATION]
         self.end_location: Locations = attributes[END_LOCATION]
+        
+        self.handpath_rotation_direction = self.get_handpath_rotation_direction()
+
 
     def update_attr_from_arrow(self) -> None:
         self.color = self.arrow.color

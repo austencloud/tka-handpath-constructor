@@ -84,8 +84,6 @@ class Pictograph(QGraphicsScene):
 
         self.setup_managers(main_widget)
 
-
-
     def setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
         self.arrow_positioner = ArrowPositioner(self)
@@ -137,8 +135,6 @@ class Pictograph(QGraphicsScene):
                 }
             )
         return state
-
-
 
     def get_motion_by_color(self, color: str) -> Optional[Motion]:
         for motion in self.motions:
@@ -250,4 +246,3 @@ class Pictograph(QGraphicsScene):
 
     def update_hands(self) -> None:
         self.hand_positioner.update_hand_positions()
-

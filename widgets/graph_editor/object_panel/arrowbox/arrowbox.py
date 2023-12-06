@@ -126,7 +126,6 @@ class ArrowBox(ObjectBox):
             self.blue_arrows.append(arrow)
 
         for arrow in self.arrows:
-            arrow.update_appearance()
             arrow.setTransformOriginPoint(arrow.boundingRect().center())
             arrow.is_dim(True)
 

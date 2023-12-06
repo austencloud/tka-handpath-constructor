@@ -137,10 +137,8 @@ class AttrBox(QFrame):
         self.update_labels(motion)
 
     def update_labels(self, motion: "Motion") -> None:
-        self.header_widget._update_clock()
         self.start_end_widget.update_start_end_boxes()
         self.motion_type_widget.update_motion_type_box()
-        self.turns_widget.update_turns_label_box(motion)
 
     def get_turns_button_stylesheet(self, button: Literal["small", "large"]) -> str:
         if button == "small":
@@ -193,12 +191,9 @@ class AttrBox(QFrame):
         )
 
     def clear_attr_box(self):
-        # Clear all attributes in the attribute box
-        # You might want to clear labels, reset combo boxes, etc.\
-        self.header_widget.clear_clock_label()
+
         self.motion_type_widget.clear_motion_type_box()
         self.start_end_widget.clear_start_end_boxes()
-        self.turns_widget.clear_turns_label()
 
     # Update the update_attr_box method to only update when the corresponding arrow is selected
     def update_attr_box(self, arrow=None):
@@ -214,13 +209,9 @@ class AttrBox(QFrame):
             if isinstance(child, QFrame):
                 child.deleteLater()
 
-        if self.turns_widget:
-            for child in self.turns_widget.children():
-                if isinstance(child, QFrame):
-                    child.deleteLater()
+
         self.update()
 
         self.header_widget.update_header_widget_size()
         self.motion_type_widget.update_motion_type_widget_size()
         self.start_end_widget.update_start_end_widget_size()
-        self.turns_widget.update_turns_widget_size()

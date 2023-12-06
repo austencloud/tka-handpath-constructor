@@ -262,6 +262,7 @@ class Hand(GraphicalObject):
         }
 
         self.static_arrow = StaticArrow(self.pictograph, static_arrow_dict)
+        self.static_arrow.update_svg(f"resources/images/arrows/{self.static_arrow.motion.motion_type}.svg")
         for arrow in self.pictograph.arrows[:]:
             if arrow.color == self.color:
                 self.pictograph.removeItem(arrow)

@@ -1,10 +1,11 @@
-from typing import List
+from typing import List, Union
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from PyQt6.QtGui import QTransform
 from data.start_end_location_map import get_start_end_locations
 from objects.hand import Hand
 from settings.string_constants import (
+    COUNTER_CLOCKWISE,
     DASH,
     MOTION_TYPE,
     COLOR,
@@ -47,15 +48,19 @@ from utilities.TypeChecking.TypeChecking import (
     RotationDirections,
 )
 
+
 if TYPE_CHECKING:
     from objects.ghosts.ghost_arrow import GhostArrow
     from objects.hand import Hand
+    from widgets.graph_editor.object_panel.arrowbox.arrowbox import ArrowBox
+    from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
 class Arrow(GraphicalObject):
-    def __init__(self, scene, attributes) -> None:
+    def __init__(self, scene: Union["ArrowBox", "Pictograph"], attributes) -> None:
         super().__init__(scene)
         self.setAcceptHoverEvents(True)
+        self.scene = scene
         self.hand: Hand = None
         self.motion: Motion = None
 
@@ -112,7 +117,6 @@ class Arrow(GraphicalObject):
 
     def setup_attributes(self, attributes: "MotionAttributesDicts") -> None:
         self.drag_offset = QPointF(0, 0)
-
 
         self.arrow_location: Locations = attributes[ARROW_LOCATION]
         self.is_svg_mirrored: bool = False
@@ -283,15 +287,95 @@ class Arrow(GraphicalObject):
         return location_to_angle.get(self.arrow_location, 0)
 
     def get_location_to_angle_map(
-        self, motion_type: MotionTypes
+        self, motion_type: MotionTypes, handpath_rotation_direction: RotationDirections
     ) -> Dict[str, Dict[str, int]]:
+        location_to_angle = {}
+
         if motion_type == SHIFT:
-            return {
+            if handpath_rotation_direction == CLOCKWISE:
+                location_to_angle = {
                     NORTHEAST: 0,
                     SOUTHEAST: 90,
                     SOUTHWEST: 180,
                     NORTHWEST: 270,
-                },
+                }
+            elif handpath_rotation_direction == COUNTER_CLOCKWISE:
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 270,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 90,
+                }
+        elif motion_type == DASH:
+            if (
+                self.motion.start_location == NORTH
+                and self.motion.end_location == SOUTH
+            ):
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                }
+            elif (
+                self.motion.start_location == SOUTH
+                and self.motion.end_location == NORTH
+            ):
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 270,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 90,
+                }
+            elif (
+                self.motion.start_location == EAST and self.motion.end_location == WEST
+            ):
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                }
+            elif (
+                self.motion.start_location == WEST and self.motion.end_location == EAST
+            ):
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 270,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 90,
+                }
+        elif motion_type == STATIC:
+            if self.arrow_location == NORTH:
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                }
+            elif self.arrow_location == SOUTH:
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 270,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 90,
+                }
+            elif self.arrow_location == EAST:
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 90,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 270,
+                }
+            elif self.arrow_location == WEST:
+                location_to_angle = {
+                    NORTHEAST: 0,
+                    SOUTHEAST: 270,
+                    SOUTHWEST: 180,
+                    NORTHWEST: 90,
+                }
+
+        return location_to_angle
 
     def get_attributes(self) -> ArrowAttributesDicts:
         return {attr: getattr(self, attr) for attr in ARROW_ATTRIBUTES}

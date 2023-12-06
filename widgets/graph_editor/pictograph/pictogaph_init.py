@@ -115,7 +115,7 @@ class PictographInit:
             START_LOCATION: SOUTH,
             END_LOCATION: WEST,
         }
-        blue_motion = Motion(self.pictograph, self.pictograph.ghost_arrows[BLUE], blue_motion_attributes)
+        blue_motion = Motion(self.pictograph, self.pictograph.ghost_arrows[BLUE], None, blue_motion_attributes)
         self.pictograph.ghost_arrows[BLUE].motion = blue_motion
         self.pictograph.ghost_arrows[BLUE].setup_svg_file()
         self.pictograph.ghost_arrows[BLUE].setup_attributes(blue_motion_attributes)

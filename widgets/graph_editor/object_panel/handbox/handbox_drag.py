@@ -135,18 +135,17 @@ class HandBoxDrag(ObjectBoxDrag):
                     self.has_entered_pictograph_once = True
                     self.remove_same_color_objects()
                     self._create_static_arrow()
-                    self.pictograph.add_motion(
-                        self.ghost_hand.arrow,
-                        self.ghost_hand,
-                        STATIC,
-                    )
+                    self.ghost_hand.arrow.motion = self.pictograph.motion_set[self.color]
+                    self.ghost_hand.motion = self.pictograph.motion_set[self.color]
 
+                    
                 pos_in_main_window = self.handbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
                     pos_in_main_window
                 )
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
                 new_location = self.pictograph.get_nearest_handpoint(scene_pos)
+
 
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location
@@ -223,5 +222,7 @@ class HandBoxDrag(ObjectBoxDrag):
         self.static_arrow.motion.end_location = self.hand_location
         self.static_arrow.hand = self.ghost_hand
         self.static_arrow.hand.arrow = self.static_arrow
+        self.static_arrow.svg_file = f"resources/svg/{self.static_arrow.motion_type}.svg"
+        self.static_arrow.update_svg(self.static_arrow.svg_file)
         self.static_arrow.update_appearance()
         self.pictograph.update_pictograph()
