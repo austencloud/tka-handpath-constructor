@@ -13,6 +13,7 @@ from objects.motion import Motion
 from settings.string_constants import (
     ARROW_LOCATION,
     BLUE,
+    CLOCKWISE,
     COLOR,
     EAST,
     END_LOCATION,
@@ -75,20 +76,17 @@ class PictographInit:
         default_red_ghost_arrow_attributes = {
             COLOR: RED,
             ARROW_LOCATION: NORTHEAST,
-            START_LOCATION: NORTH,
-            END_LOCATION: EAST,
         }
 
         default_blue_ghost_arrow_attributes = {
             COLOR: BLUE,
             ARROW_LOCATION: SOUTHWEST,
-            START_LOCATION: SOUTH,
-            END_LOCATION: WEST,
         }
 
         red_ghost_arrow = GhostArrow(
             self.pictograph, default_red_ghost_arrow_attributes
         )
+
         blue_ghost_arrow = GhostArrow(
             self.pictograph, default_blue_ghost_arrow_attributes
         )
@@ -96,7 +94,7 @@ class PictographInit:
         ghost_arrows = {RED: red_ghost_arrow, BLUE: blue_ghost_arrow}
         return ghost_arrows
 
-    def init_motion_set(self) -> dict[str, dict[str, dict[str, dict[str, str]]]]:
+    def init_motion_set(self) -> dict[str, Motion]:
         red_motion_attributes = {
             COLOR: RED,
             MOTION_TYPE: SHIFT,
@@ -104,7 +102,12 @@ class PictographInit:
             START_LOCATION: NORTH,
             END_LOCATION: EAST,
         }
-        red_motion = Motion(self.pictograph, self.pictograph.ghost_arrows[RED], None, red_motion_attributes)
+        red_motion = Motion(
+            self.pictograph,
+            self.pictograph.ghost_arrows[RED],
+            self.pictograph.ghost_hands[RED],
+            red_motion_attributes,
+        )
         self.pictograph.ghost_arrows[RED].motion = red_motion
         self.pictograph.ghost_arrows[RED].setup_svg_file()
         self.pictograph.ghost_arrows[RED].setup_attributes(red_motion_attributes)
@@ -115,14 +118,19 @@ class PictographInit:
             START_LOCATION: SOUTH,
             END_LOCATION: WEST,
         }
-        blue_motion = Motion(self.pictograph, self.pictograph.ghost_arrows[BLUE], None, blue_motion_attributes)
+        blue_motion = Motion(
+            self.pictograph,
+            self.pictograph.ghost_arrows[BLUE],
+            self.pictograph.ghost_hands[BLUE],
+            blue_motion_attributes,
+        )
         self.pictograph.ghost_arrows[BLUE].motion = blue_motion
         self.pictograph.ghost_arrows[BLUE].setup_svg_file()
         self.pictograph.ghost_arrows[BLUE].setup_attributes(blue_motion_attributes)
-        
+
         motion_set = {RED: red_motion, BLUE: blue_motion}
         return motion_set
-    
+
     def init_ghost_hands(self) -> dict[str, GhostHand]:
         default_red_ghost_hand_attributes = {
             COLOR: RED,

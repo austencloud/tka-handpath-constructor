@@ -25,17 +25,7 @@ class LayoutManager:
         self.left_layout: QVBoxLayout = self.layouts["right"]
         self.right_layout: QVBoxLayout = self.layouts["left"]
         self.graph_editor_layout: QHBoxLayout = self.layouts["graph_editor"]
-        self.objectbox_layout: QVBoxLayout = self.layouts["objectbox"]
 
-        self.pictograph_layout: QVBoxLayout = self.layouts["pictograph"]
-        self.word_layout: QHBoxLayout = self.layouts["word"]
-        self.pictograph_and_buttons_layout: QHBoxLayout = self.layouts[
-            "pictograph_and_buttons"
-        ]
-        self.letter_buttons_layout: QVBoxLayout = self.layouts["letter_buttons"]
-        self.sequence_layout: QVBoxLayout = self.layouts["sequence"]
-        self.keyboard_layout: QVBoxLayout = self.layouts["keyboard"]
-        self.sequence_layout: QHBoxLayout = self.layouts["sequence"]
 
         self.graph_editor = self.main_widget.graph_editor
         self.pictograph = self.main_widget.graph_editor.pictograph

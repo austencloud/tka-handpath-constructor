@@ -58,13 +58,14 @@ if TYPE_CHECKING:
 
 class Arrow(GraphicalObject):
     def __init__(
-        self, arrow_scene: Union["ArrowBox", "Pictograph"], attributes
+        self, arrow_scene: Union["ArrowBox", "Pictograph"], arrow_attributes
     ) -> None:
         super().__init__(arrow_scene)
         self.setAcceptHoverEvents(True)
         self.arrow_scene = arrow_scene
         self.hand: Hand = None
         self.motion: Motion = None
+
 
     def setup_svg_file(self) -> None:
         self.svg_file = f"{ARROW_DIR}{self.motion.motion_type}.svg"
