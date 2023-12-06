@@ -29,8 +29,8 @@ class GraphEditor(QFrame):
         palette.setColor(QPalette.ColorRole.WindowText, QColor("black"))
         self.setPalette(palette)
         # remove the space in between each widget in the frame
-        self.setFixedHeight(int(self.main_widget.height() * 1 / 4))
-        self.setFixedWidth(int(self.main_widget.width() * 0.5))
+        self.setFixedHeight(int(self.main_widget.height()))
+        self.setFixedWidth(int(self.main_widget.width()))
 
         graph_editor_frame_layout = QHBoxLayout(self)
         graph_editor_frame_layout.setSpacing(0)
@@ -41,18 +41,15 @@ class GraphEditor(QFrame):
 
         objectbox_layout = QVBoxLayout()
         pictograph_layout = QVBoxLayout()
-        vtg_panel_layout = QVBoxLayout()
 
         self.pictograph = Pictograph(self.main_widget, self)
         self.handbox = Handbox(main_widget, self.pictograph)
         self.arrowbox = ArrowBox(main_widget, self.pictograph)
-        self.vtg_panel = VTGPanel(self.pictograph)
         self.attr_panel = AttrPanel(self.pictograph)
 
         objectbox_layout.addWidget(self.arrowbox.view)
         objectbox_layout.addWidget(self.handbox.view)
         pictograph_layout.addWidget(self.pictograph.view)
-        vtg_panel_layout.addWidget(self.vtg_panel)
 
         graph_editor_frame_layout.setContentsMargins(0, 0, 0, 0)
         graph_editor_frame_layout.addLayout(objectbox_layout)
@@ -64,13 +61,12 @@ class GraphEditor(QFrame):
         self.setMouseTracking(True)
 
     def update_size(self) -> None:
-        self.setFixedHeight(int(self.main_widget.height() * 1 / 3))
-        self.setFixedWidth(int(self.main_widget.width() * 0.5))
+        self.setFixedHeight(int(self.main_widget.height()))
+        self.setFixedWidth(int(self.main_widget.width()))
         self.pictograph.view.update_pictograph_size()
         self.update_arrowbox_size()
         self.update_handbox_size()
         self.update_attr_panel_size()
-        self.update_vtg_panel_size()
 
     def update_arrowbox_size(self) -> None:
         self.arrowbox.view.setFixedSize(
@@ -88,7 +84,3 @@ class GraphEditor(QFrame):
         self.attr_panel.setFixedHeight(self.height())
         self.attr_panel.red_attr_box.update_attr_box_size()
         self.attr_panel.blue_attr_box.update_attr_box_size()
-
-    def update_vtg_panel_size(self) -> None:
-        self.vtg_panel.setFixedHeight(self.height())
-        self.vtg_panel.setFixedWidth(int(self.width() / 2))

@@ -23,8 +23,8 @@ class MainWindow(QMainWindow):
 
         screen_geometry = screen.geometry()
 
-        self.main_window_width = int(screen_geometry.width() * 0.9)
-        self.main_window_height = int(screen_geometry.height() * 0.8)
+        self.main_window_width = int(screen_geometry.width() * 0.5)
+        self.main_window_height = int(screen_geometry.height() * 0.2)
 
         self.move(
             screen_geometry.x()
@@ -43,7 +43,6 @@ class MainWindow(QMainWindow):
         self.show()
         self.setWindowTitle("Handpath Constructor")
 
-
     def write_profiling_stats_to_file(self, file_path: str) -> None:
         stats: pstats.Stats = pstats.Stats(self.profiler).sort_stats("cumtime")
         with open(file_path, "w") as f:
@@ -59,7 +58,7 @@ def main() -> None:
     profiler.enable()
 
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
-    
+
     app = QApplication(sys.argv)
     main_window = MainWindow(profiler)
     main_window.setFocus()

@@ -60,8 +60,6 @@ class LayoutManager:
 
     def add_black_border_to_widgets(self) -> None:
         self.add_black_border(self.main_widget.graph_editor.pictograph)
-        self.add_black_border(self.main_widget.graph_editor.vtg_panel)
-
         self.add_black_border(self.main_widget.graph_editor.pictograph)
         self.add_black_border(self.main_widget.graph_editor.handbox)
 
