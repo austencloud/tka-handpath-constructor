@@ -58,7 +58,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.color: Colors = target_arrow.color
         self.motion_type: MotionTypes = target_arrow.motion_type
-        self.arrow_location: Locations = target_arrow.arrow_location
+        self.arrow_location: Locations = target_arrow.location
         self.rotation_direction: RotationDirections = target_arrow.rotation_direction
 
         self.ghost_arrow = self.pictograph.ghost_arrows[self.color]
@@ -111,7 +111,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost_arrow.color = self.color
-        self.ghost_arrow.arrow_location = new_location
+        self.ghost_arrow.location = new_location
         self.ghost_arrow.motion_type = self.motion_type
         self.ghost_arrow.rotation_direction = self.rotation_direction
 
@@ -234,7 +234,7 @@ class ArrowBoxDrag(ObjectBoxDrag):
             arrow.motion.motion_type,
             arrow.rotation_direction,
             arrow.color,
-            arrow.arrow_location,
+            arrow.location,
         )
 
         rotation_angle_map: Dict[

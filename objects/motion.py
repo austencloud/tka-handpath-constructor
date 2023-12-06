@@ -21,28 +21,28 @@ class Motion:
         pictograph: "Pictograph",
         arrow: "Arrow",
         hand: "Hand",
-        attributes: MotionAttributesDicts,
+        motion_attributes: MotionAttributesDicts,
     ) -> None:
         self.pictograph = pictograph
         self.arrow = arrow
         self.hand = hand
-        self.attributes = attributes
-        self.setup_attributes(attributes)
+        self.attributes = motion_attributes
+        self.setup_attributes(motion_attributes)
 
-    def setup_attributes(self, attributes) -> None:
-        self.color: Colors = attributes[COLOR]
-        self.motion_type: MotionTypes = attributes[MOTION_TYPE]
-        self.arrow_location: Locations = attributes[ARROW_LOCATION]
-        self.start_location: Locations = attributes[START_LOCATION]
-        self.end_location: Locations = attributes[END_LOCATION]
+    def setup_attributes(self, motion_attributes) -> None:
+        self.color: Colors = motion_attributes[COLOR]
+        self.motion_type: MotionTypes = motion_attributes[MOTION_TYPE]
+        self.arrow_location: Locations = motion_attributes[ARROW_LOCATION]
         
-        self.handpath_rotation_direction = self.get_handpath_rotation_direction()
+        self.start_location: Locations = motion_attributes[START_LOCATION]
+        self.end_location: Locations = motion_attributes[END_LOCATION]
 
+        self.handpath_rotation_direction = self.get_handpath_rotation_direction()
 
     def update_attr_from_arrow(self) -> None:
         self.color = self.arrow.color
         self.motion_type = self.arrow.motion.motion_type
-        self.arrow_location = self.arrow.arrow_location
+        self.arrow_location = self.arrow.location
 
         self.start_location = self.arrow.motion.start_location
         self.end_location = self.arrow.motion.end_location
@@ -62,6 +62,6 @@ class Motion:
                 return CLOCKWISE
             elif pattern in counterclockwise_patterns:
                 return COUNTER_CLOCKWISE
-            
+
         elif self.motion_type in [DASH, STATIC]:
             return None

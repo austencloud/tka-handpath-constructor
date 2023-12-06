@@ -127,7 +127,7 @@ class Pictograph(QGraphicsScene):
                 {
                     COLOR: motion.color,
                     MOTION_TYPE: motion.motion_type,
-                    ARROW_LOCATION: motion.arrow.arrow_location,
+                    ARROW_LOCATION: motion.arrow.location,
                     START_LOCATION: motion.start_location,
                     END_LOCATION: motion.end_location,
                     START_LOCATION: motion.start_location,
@@ -205,7 +205,7 @@ class Pictograph(QGraphicsScene):
         motion_attributes: MotionAttributesDicts = {
             COLOR: arrow.color,
             MOTION_TYPE: motion_type,
-            ARROW_LOCATION: arrow.arrow_location,
+            ARROW_LOCATION: arrow.location,
         }
 
         motion = Motion(self, arrow, hand, motion_attributes)

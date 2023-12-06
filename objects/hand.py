@@ -136,7 +136,7 @@ class Hand(GraphicalObject):
                 },
             )
 
-            current_location = self.arrow.arrow_location
+            current_location = self.arrow.location
             rotation_direction = self.arrow.rotation_direction
             motion_type = self.arrow.motion.motion_type
             new_location = shift_location_map.get(
@@ -144,7 +144,7 @@ class Hand(GraphicalObject):
             ).get(new_location)
 
             if new_location:
-                self.arrow.arrow_location = new_location
+                self.arrow.location = new_location
                 start_location, end_location = get_start_end_locations(
                     motion_type, rotation_direction, new_location
                 )
@@ -161,7 +161,7 @@ class Hand(GraphicalObject):
             self.arrow.motion.start_location = new_location
             self.arrow.motion.end_location = new_location
 
-            self.arrow.arrow_location = new_location
+            self.arrow.location = new_location
             self.arrow.motion.start_location = new_location
             self.arrow.motion.end_location = new_location
             self.arrow.update_appearance()
@@ -221,8 +221,6 @@ class Hand(GraphicalObject):
 
     ### HELPERS ###
 
-
-
     def set_svg_color(self, new_color: Colors) -> bytes:
         new_hex_color: ColorsHex = COLOR_MAP.get(new_color)
 
@@ -254,7 +252,9 @@ class Hand(GraphicalObject):
         }
 
         self.static_arrow = StaticArrow(self.pictograph, static_arrow_dict)
-        self.static_arrow.update_svg(f"resources/images/arrows/{self.static_arrow.motion.motion_type}.svg")
+        self.static_arrow.update_svg(
+            f"resources/images/arrows/{self.static_arrow.motion.motion_type}.svg"
+        )
         for arrow in self.pictograph.arrows[:]:
             if arrow.color == self.color:
                 self.pictograph.removeItem(arrow)

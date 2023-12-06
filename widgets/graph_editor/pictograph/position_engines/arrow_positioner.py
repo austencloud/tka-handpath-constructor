@@ -14,7 +14,6 @@ if TYPE_CHECKING:
     from widgets.graph_editor.pictograph.pictograph import Pictograph
 
 
-
 class ArrowPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.letters = pictograph.letters
@@ -29,16 +28,16 @@ class ArrowPositioner:
 
     def set_arrow_to_default_loc(self, arrow: "Arrow") -> None:
         arrow.set_arrow_transform_origin_to_center()
-        layer2_point = self.pictograph.grid.layer2_points.get(arrow.arrow_location)
+        layer2_point = self.pictograph.grid.layer2_points.get(arrow.location)
         adjustment = QPointF(0, 0)
 
-        if arrow.arrow_location == NORTHEAST:
+        if arrow.location == NORTHEAST:
             adjustment = QPointF(DISTANCE, -DISTANCE)
-        elif arrow.arrow_location == SOUTHEAST:
+        elif arrow.location == SOUTHEAST:
             adjustment = QPointF(DISTANCE, DISTANCE)
-        elif arrow.arrow_location == SOUTHWEST:
+        elif arrow.location == SOUTHWEST:
             adjustment = QPointF(-DISTANCE, DISTANCE)
-        elif arrow.arrow_location == NORTHWEST:
+        elif arrow.location == NORTHWEST:
             adjustment = QPointF(-DISTANCE, -DISTANCE)
 
         new_pos = QPointF(

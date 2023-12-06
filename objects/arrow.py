@@ -57,10 +57,12 @@ if TYPE_CHECKING:
 
 
 class Arrow(GraphicalObject):
-    def __init__(self, scene: Union["ArrowBox", "Pictograph"], attributes) -> None:
-        super().__init__(scene)
+    def __init__(
+        self, arrow_scene: Union["ArrowBox", "Pictograph"], attributes
+    ) -> None:
+        super().__init__(arrow_scene)
         self.setAcceptHoverEvents(True)
-        self.scene = scene
+        self.arrow_scene = arrow_scene
         self.hand: Hand = None
         self.motion: Motion = None
 
@@ -118,7 +120,7 @@ class Arrow(GraphicalObject):
     def setup_attributes(self, attributes: "MotionAttributesDicts") -> None:
         self.drag_offset = QPointF(0, 0)
 
-        self.arrow_location: Locations = attributes[ARROW_LOCATION]
+        self.location: Locations = attributes[ARROW_LOCATION]
         self.is_svg_mirrored: bool = False
 
         self.center_x = self.boundingRect().width() / 2
@@ -145,16 +147,16 @@ class Arrow(GraphicalObject):
             if self.hand:
                 self.update_hand_on_click()
 
-        self.scene.arrows.remove(self)
-        self.scene.update_pictograph()
-        self.scene.arrows.append(self)
+        self.arrow_scene.arrows.remove(self)
+        self.arrow_scene.update_pictograph()
+        self.arrow_scene.arrows.append(self)
 
-        for item in self.scene.items():
+        for item in self.arrow_scene.items():
             if item != self:
                 item.setSelected(False)
         # Notify the pictograph scene about the selection change
-        if self.scene:
-            self.scene.update_attr_panel()
+        if self.arrow_scene:
+            self.arrow_scene.update_attr_panel()
 
     def update_hand_on_click(self) -> None:
         self.hand.color = self.color
@@ -164,20 +166,20 @@ class Arrow(GraphicalObject):
     def update_ghost_on_click(self) -> None:
         from widgets.graph_editor.pictograph.pictograph import Pictograph
 
-        if isinstance(self.scene, Pictograph):
-            self.ghost_arrow: "GhostArrow" = self.scene.ghost_arrows[self.color]
+        if isinstance(self.arrow_scene, Pictograph):
+            self.ghost_arrow: "GhostArrow" = self.arrow_scene.ghost_arrows[self.color]
             self.ghost_arrow.hand = self.hand
             self.ghost_arrow.set_attributes_from_dict(self.attributes)
             self.ghost_arrow.set_arrow_attrs_from_arrow(self)
             self.ghost_arrow.update_appearance()
             self.ghost_arrow.transform = self.transform
-            self.scene.addItem(self.ghost_arrow)
-            self.scene.arrows.append(self.ghost_arrow)
+            self.arrow_scene.addItem(self.ghost_arrow)
+            self.arrow_scene.arrows.append(self.ghost_arrow)
 
     def update_location(self, new_pos: QPointF) -> None:
-        new_location = self.scene.get_closest_box_point(new_pos)
+        new_location = self.arrow_scene.get_closest_box_point(new_pos)
 
-        self.arrow_location = new_location
+        self.location = new_location
         self.motion.arrow_location = new_location
 
         self.set_start_end_locations()
@@ -190,22 +192,21 @@ class Arrow(GraphicalObject):
 
         self.update_appearance()
 
-        self.scene.arrows.remove(self)
-        for hand in self.scene.hands:
+        self.arrow_scene.arrows.remove(self)
+        for hand in self.arrow_scene.hands:
             if hand.color == self.color:
                 hand.arrow = self
                 self.hand = hand
-        self.scene.update_pictograph()
-        self.scene.arrows.append(self)
-
+        self.arrow_scene.update_pictograph()
+        self.arrow_scene.arrows.append(self)
 
     def mouseReleaseEvent(self, event) -> None:
-        self.scene.removeItem(self.ghost_arrow)
-        if self.ghost_arrow in self.scene.arrows:
-            self.scene.arrows.remove(self.ghost_arrow)
+        self.arrow_scene.removeItem(self.ghost_arrow)
+        if self.ghost_arrow in self.arrow_scene.arrows:
+            self.arrow_scene.arrows.remove(self.ghost_arrow)
 
         self.ghost_arrow.hand = None
-        self.scene.update_pictograph()
+        self.arrow_scene.update_pictograph()
 
     ### UPDATERS ###
 
@@ -224,31 +225,21 @@ class Arrow(GraphicalObject):
             self.motion.start_location,
             self.motion.end_location,
         ) = get_start_end_locations(
-            self.motion_type, self.rotation_direction, self.arrow_location
+            self.motion.handpath_rotation_direction, self.location
         )
-        self.motion.start_location = self.motion.start_location
-        self.motion.end_location = self.motion.end_location
 
     def set_arrow_attrs_from_arrow(self, target_arrow: "Arrow") -> None:
         self.color = target_arrow.color
-        self.motion_type = target_arrow.motion_type
-        self.arrow_location = target_arrow.arrow_location
-        self.rotation_direction = target_arrow.rotation_direction
-        self.motion.start_location = target_arrow.motion.start_location
-        self.motion.end_location = target_arrow.motion.end_location
+        self.location = target_arrow.location
 
         self.motion.color = target_arrow.color
-        self.motion.motion_type = target_arrow.motion_type
-        self.motion.arrow_location = target_arrow.arrow_location
-        self.motion.rotation_direction = target_arrow.rotation_direction
-        self.motion.start_location = target_arrow.motion.start_location
-        self.motion.end_location = target_arrow.motion.end_location
+        self.motion.arrow_location = target_arrow.location
 
     def update_hand_during_drag(self) -> None:
-        for hand in self.scene.hand_set.values():
+        for hand in self.arrow_scene.hand_set.values():
             if hand.color == self.color:
-                if hand not in self.scene.hands:
-                    self.scene.hands.append(hand)
+                if hand not in self.arrow_scene.hands:
+                    self.arrow_scene.hands.append(hand)
 
                 hand.set_attributes_from_dict(
                     {
@@ -258,11 +249,11 @@ class Arrow(GraphicalObject):
                 )
                 hand.arrow = self.ghost_arrow
 
-                if hand not in self.scene.items():
-                    self.scene.addItem(hand)
+                if hand not in self.arrow_scene.items():
+                    self.arrow_scene.addItem(hand)
                 hand.show()
                 hand.update_appearance()
-                self.scene.update_pictograph()
+                self.arrow_scene.update_pictograph()
 
     def set_arrow_transform_origin_to_center(self) -> None:
         self.center = self.boundingRect().center()
@@ -282,7 +273,7 @@ class Arrow(GraphicalObject):
         location_to_angle = self.get_location_to_angle_map(
             arrow.motion.motion_type, arrow.motion.handpath_rotation_direction
         )
-        return location_to_angle.get(self.arrow_location, 0)
+        return location_to_angle.get(self.location, 0)
 
     def get_location_to_angle_map(
         self, motion_type: MotionTypes, handpath_rotation_direction: RotationDirections
@@ -344,28 +335,28 @@ class Arrow(GraphicalObject):
                     NORTHWEST: 90,
                 }
         elif motion_type == STATIC:
-            if self.arrow_location == NORTH:
+            if self.location == NORTH:
                 location_to_angle = {
                     NORTHEAST: 0,
                     SOUTHEAST: 90,
                     SOUTHWEST: 180,
                     NORTHWEST: 270,
                 }
-            elif self.arrow_location == SOUTH:
+            elif self.location == SOUTH:
                 location_to_angle = {
                     NORTHEAST: 0,
                     SOUTHEAST: 270,
                     SOUTHWEST: 180,
                     NORTHWEST: 90,
                 }
-            elif self.arrow_location == EAST:
+            elif self.location == EAST:
                 location_to_angle = {
                     NORTHEAST: 0,
                     SOUTHEAST: 90,
                     SOUTHWEST: 180,
                     NORTHWEST: 270,
                 }
-            elif self.arrow_location == WEST:
+            elif self.location == WEST:
                 location_to_angle = {
                     NORTHEAST: 0,
                     SOUTHEAST: 270,
@@ -387,11 +378,11 @@ class Arrow(GraphicalObject):
             DOWN: {NORTHEAST: SOUTHEAST, NORTHWEST: SOUTHWEST},
             RIGHT: {NORTHWEST: NORTHEAST, SOUTHWEST: SOUTHEAST},
         }
-        current_location = self.arrow_location
+        current_location = self.location
         new_location = wasd_location_map.get(direction, {}).get(
             current_location, current_location
         )
-        self.arrow_location = new_location
+        self.location = new_location
         self.motion.arrow_location = new_location
         (
             new_start_location,
@@ -413,7 +404,7 @@ class Arrow(GraphicalObject):
         self.hand.update_appearance()
         self.motion.update_attr_from_arrow()
 
-        self.scene.update_pictograph()
+        self.arrow_scene.update_pictograph()
 
     def rotate_arrow(self, rotation_direction: RotationDirections) -> None:
         diamond_mode_locations = [NORTH, EAST, SOUTH, WEST]
@@ -429,7 +420,7 @@ class Arrow(GraphicalObject):
     def rotate_diamond_mode_shift(
         self, rotation_direction, box_mode_locations: List[Locations]
     ) -> None:
-        current_location_index = box_mode_locations.index(self.arrow_location)
+        current_location_index = box_mode_locations.index(self.location)
         new_location_index = (
             (current_location_index + 1) % 4
             if rotation_direction == CLOCKWISE
@@ -446,19 +437,19 @@ class Arrow(GraphicalObject):
         self.motion.start_location = new_start_location
         self.motion.end_location = new_end_location
 
-        self.arrow_location = new_arrow_location
+        self.location = new_arrow_location
         self.motion.start_location = new_start_location
         self.motion.end_location = new_end_location
         self.hand.hand_location = new_end_location
 
         self.update_appearance()
         self.hand.update_appearance()
-        self.scene.update_pictograph()
+        self.arrow_scene.update_pictograph()
 
     def rotate_diamond_mode_static_arrow(
         self, rotation_direction, diamond_mode_locations: List[Locations]
     ):
-        current_location_index = diamond_mode_locations.index(self.arrow_location)
+        current_location_index = diamond_mode_locations.index(self.location)
         new_location_index = (
             (current_location_index + 1) % 4
             if rotation_direction == CLOCKWISE
@@ -468,14 +459,14 @@ class Arrow(GraphicalObject):
         self.motion.arrow_location = new_location
         self.motion.start_location = new_location
         self.motion.end_location = new_location
-        self.arrow_location = new_location
+        self.location = new_location
         self.motion.start_location = new_location
         self.motion.end_location = new_location
         self.hand.hand_location = new_location
 
         self.motion.update_attr_from_arrow()
         self.hand.update_appearance()
-        self.scene.update_pictograph()
+        self.arrow_scene.update_pictograph()
 
     def swap_color(self) -> None:
         if self.color == RED:
@@ -489,7 +480,7 @@ class Arrow(GraphicalObject):
         self.hand.color = new_color
         self.hand.update_appearance()
 
-        self.scene.update_pictograph()
+        self.arrow_scene.update_pictograph()
 
     def swap_rot_dir(self) -> None:
         pass
@@ -519,7 +510,7 @@ class Arrow(GraphicalObject):
             if not isinstance(self, self.ghost_arrow.__class__) and self.ghost_arrow:
                 self.ghost_arrow.is_svg_mirrored = self.is_svg_mirrored
                 self.ghost_arrow.update_attributes(self.attributes)
-        self.scene.update_pictograph()
+        self.arrow_scene.update_pictograph()
 
     def mirror(self) -> None:
         transform = QTransform()
@@ -544,17 +535,17 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored = False
 
     def delete(self, keep_hand: bool = False) -> None:
-        self.scene.removeItem(self)
-        if self in self.scene.arrows:
-            self.scene.arrows.remove(self)
-            self.scene.motions.remove(self.motion)
+        self.arrow_scene.removeItem(self)
+        if self in self.arrow_scene.arrows:
+            self.arrow_scene.arrows.remove(self)
+            self.arrow_scene.motions.remove(self.motion)
             self.pictograph.graph_editor.attr_panel.update_panel(self.color)
         if keep_hand:
             self.hand._create_static_arrow()
         else:
             self.hand.delete()
 
-        self.scene.update_pictograph()
+        self.arrow_scene.update_pictograph()
 
 
 class StaticArrow(Arrow):

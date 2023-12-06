@@ -49,7 +49,7 @@ class HandBoxDrag(ObjectBoxDrag):
         self.placed_hand = Hand(self.pictograph, self.ghost_hand.get_attributes())
 
         self.placed_hand.arrow = self.ghost_hand.arrow
-        self.placed_hand.arrow.arrow_location = self.hand_location
+        self.placed_hand.arrow.location = self.hand_location
         self.placed_hand.arrow.motion.start_location = self.hand_location
         self.placed_hand.arrow.motion.end_location = self.hand_location
 
@@ -109,7 +109,7 @@ class HandBoxDrag(ObjectBoxDrag):
         self.ghost_hand.motion.end_location = self.hand_location
 
         self.ghost_hand.arrow = self.static_arrow
-        self.ghost_hand.arrow.arrow_location = self.hand_location
+        self.ghost_hand.arrow.location = self.hand_location
         self.ghost_hand.arrow.motion.start_location = self.hand_location
         self.ghost_hand.arrow.motion.end_location = self.hand_location
 
@@ -125,10 +125,11 @@ class HandBoxDrag(ObjectBoxDrag):
                     self.has_entered_pictograph_once = True
                     self.remove_same_color_objects()
                     self._create_static_arrow()
-                    self.ghost_hand.arrow.motion = self.pictograph.motion_set[self.color]
+                    self.ghost_hand.arrow.motion = self.pictograph.motion_set[
+                        self.color
+                    ]
                     self.ghost_hand.motion = self.pictograph.motion_set[self.color]
 
-                    
                 pos_in_main_window = self.handbox.view.mapToGlobal(event_pos)
                 view_pos_in_pictograph = self.pictograph.view.mapFromGlobal(
                     pos_in_main_window
@@ -136,10 +137,9 @@ class HandBoxDrag(ObjectBoxDrag):
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
                 new_location = self.pictograph.get_nearest_handpoint(scene_pos)
 
-
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location
-                    self.ghost_hand.arrow.arrow_location = new_location
+                    self.ghost_hand.arrow.location = new_location
                     self.ghost_hand.arrow.motion.start_location = new_location
                     self.ghost_hand.arrow.motion.end_location = new_location
                     self.ghost_hand.motion.arrow_location = new_location
@@ -179,7 +179,7 @@ class HandBoxDrag(ObjectBoxDrag):
 
         renderer.render(painter)
         painter.end()
-        
+
         return pixmap
 
     def _create_static_arrow(self) -> None:
@@ -189,7 +189,6 @@ class HandBoxDrag(ObjectBoxDrag):
             ARROW_LOCATION: self.hand_location,
             START_LOCATION: self.hand_location,
             END_LOCATION: self.hand_location,
-
         }
 
         self.static_arrow = StaticArrow(self.pictograph, static_arrow_dict)
@@ -209,13 +208,15 @@ class HandBoxDrag(ObjectBoxDrag):
 
     def _update_static_arrow(self) -> None:
         self.static_arrow.color = self.color
-        self.static_arrow.arrow_location = self.hand_location
+        self.static_arrow.location = self.hand_location
         self.static_arrow.motion.start_location = self.hand_location
         self.static_arrow.motion.end_location = self.hand_location
         self.static_arrow.hand = self.ghost_hand
         self.static_arrow.hand.arrow = self.static_arrow
-        
-        self.static_arrow.svg_file = f"resources/images/arrows/{self.static_arrow.motion.motion_type}.svg"
+
+        self.static_arrow.svg_file = (
+            f"resources/images/arrows/{self.static_arrow.motion.motion_type}.svg"
+        )
         self.static_arrow.update_svg(self.static_arrow.svg_file)
         self.static_arrow.update_appearance()
         self.pictograph.update_pictograph()
