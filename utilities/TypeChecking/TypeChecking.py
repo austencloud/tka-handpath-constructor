@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Tuple, TypedDict, Literal
+from typing import Dict, List, Optional, Tuple, TypedDict, Literal, TYPE_CHECKING
 from .Letters import Letters
 from .SpecificPositions import SpecificPositions
 

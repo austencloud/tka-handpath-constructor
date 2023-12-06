@@ -12,11 +12,11 @@ from utilities.TypeChecking.TypeChecking import (
     RotationDirections,
     MotionTypes,
     Colors,
-    TYPE_CHECKING,
     Dict,
     Tuple,
     ColorsHex,
 )
+from typing import TYPE_CHECKING, Dict, Tuple
 
 if TYPE_CHECKING:
     from objects.arrow import Arrow
